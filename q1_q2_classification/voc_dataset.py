@@ -69,7 +69,12 @@ class VOCDataset(Dataset):
             weight_vec = torch.ones(20)
 
             # TODO insert your code here
-
+            root = tree.getroot()
+            for elem in root:
+                if elem.tag == "object":
+                    class_vec[self.INV_CLASS[elem[0].text]] = 1
+                    weight_vec[self.INV_CLASS[elem[0].text]] = 1-int(elem[3].text)
+                
             label_list.append((class_vec, weight_vec))
 
         return label_list
@@ -81,7 +86,8 @@ class VOCDataset(Dataset):
         # Some commonly used ones are random crops, flipping, rotation
         # You are encouraged to read the docs https://pytorch.org/vision/stable/transforms.html
         # Depending on the augmentation you use, your final image size will change and you will have to write the correct value of `flat_dim` in line 46 in simple_cnn.py
-        pass
+        # pass
+        return [transforms.RandomHorizontalFlip(), transforms.RandomCrop((64,64))]
 
     def __getitem__(self, index):
         """
@@ -106,6 +112,7 @@ class VOCDataset(Dataset):
         img = trans(img)
         lab_vec, wgt_vec = self.anno_list[index] 
         image = torch.FloatTensor(img)
+        # print(image.shape)
         label = torch.FloatTensor(lab_vec)
         wgt = torch.FloatTensor(wgt_vec)
 

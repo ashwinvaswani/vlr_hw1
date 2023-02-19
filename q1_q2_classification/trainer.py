@@ -46,8 +46,9 @@ def train(args, model, optimizer, scheduler=None, model_name='model'):
             # This function should take in network `output`, ground-truth `target`, weights `wgt` and return a single floating point number
             # You are NOT allowed to use any pytorch built-in functions
             # Remember to take care of underflows / overflows when writing your function
-            loss = 0
-
+            # loss = 0
+            loss_type = torch.nn.BCELoss()
+            loss  = loss_type(torch.sigmoid(output), target)
             loss.backward()
             
             if cnt % args.log_every == 0:

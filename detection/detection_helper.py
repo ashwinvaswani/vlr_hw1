@@ -213,8 +213,9 @@ def train_detector(
 
     for _iter in range(max_iters):
         # Ignore first arg (image path) during training.
+        # print("Here1")
         _, images, gt_boxes = next(train_loader)
-
+        # print("Here")
         images = images.to(device)
         gt_boxes = gt_boxes.to(device)
 

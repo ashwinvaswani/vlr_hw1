@@ -39,8 +39,10 @@ else:
 NUM_CLASSES = 20
 BATCH_SIZE = 16
 IMAGE_SHAPE = (224, 224)
-NUM_WORKERS = 12
-DATASET_PATH = "../data"
+# NUM_WORKERS = 12
+NUM_WORKERS = 0
+# DATASET_PATH = "../data"
+DATASET_PATH = "/Users/ashwinvaswani/Documents/vlr_hw1/q1_q2_classification/data"
 
 @dataclass
 class HyperParameters:
@@ -163,6 +165,7 @@ def main(args):
         return
     print("Running inference...")
     if args.test_inference:
+    # if True:
         small_dataset = torch.utils.data.Subset(
             val_dataset,
             torch.linspace(0, len(val_dataset) - 1, steps=10).long()

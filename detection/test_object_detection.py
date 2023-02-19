@@ -52,6 +52,17 @@ class TestDetectorBackboneWithFPN(unittest.TestCase):
         if len(class_logits) == 0:
             self.skipTest("Detector backbone not implemented.")
 
+        # self.assertEqual(class_logits["p3"].shape, torch.Size([2, 900, self.num_classes]))
+        # self.assertEqual(boxreg_deltas["p3"].shape, torch.Size([2, 900, 4]))
+        # self.assertEqual(centerness_logits["p3"].shape, torch.Size([2, 900, 1]))
+
+        # self.assertEqual(class_logits["p4"].shape, torch.Size([2, 256, self.num_classes]))
+        # self.assertEqual(boxreg_deltas["p4"].shape, torch.Size([2, 256, 4]))
+        # self.assertEqual(centerness_logits["p4"].shape, torch.Size([2, 256, 1]))
+
+        # self.assertEqual(class_logits["p5"].shape, torch.Size([2, 81, self.num_classes]))
+        # self.assertEqual(boxreg_deltas["p5"].shape, torch.Size([2, 81, 4]))
+        # self.assertEqual(centerness_logits["p5"].shape, torch.Size([2, 81, 1]))
         self.assertEqual(class_logits["p3"].shape, torch.Size([2, 784, self.num_classes]))
         self.assertEqual(boxreg_deltas["p3"].shape, torch.Size([2, 784, 4]))
         self.assertEqual(centerness_logits["p3"].shape, torch.Size([2, 784, 1]))
@@ -64,6 +75,7 @@ class TestDetectorBackboneWithFPN(unittest.TestCase):
         self.assertEqual(boxreg_deltas["p5"].shape, torch.Size([2, 49, 4]))
         self.assertEqual(centerness_logits["p5"].shape, torch.Size([2, 49, 1]))
 
+
     def test_get_fpn_location_coords(self):
         if self.dummy_fpn_feats['p3'] is None:
             self.skipTest("Detector backbone not implemented.")
@@ -73,6 +85,8 @@ class TestDetectorBackboneWithFPN(unittest.TestCase):
 
         # Get CPU tensors for this sanity check: (you can pass `device=` argument.
         locations_per_fpn_level = get_fpn_location_coords(fpn_feats_shapes, self.backbone.fpn_strides)
+
+        # print(locations_per_fpn_level)
         expected_locations = {
             "p3": torch.tensor([[4.0, 4.0], [4.0, 12.0], [4.0, 20.0], [4.0, 28.0], [4.0, 36.0]]),
             "p4": torch.tensor([[8.0, 8.0], [8.0, 24.0], [8.0, 40.0], [8.0, 56.0], [8.0, 72.0]]),
@@ -127,6 +141,7 @@ class TestDetectorBackboneWithFPN(unittest.TestCase):
         if _deltas is None:
             self.skipTest("fcos_get_deltas_from_test is not implemented.")
         centerness = fcos_make_centerness_targets(_deltas)
+        # print(centerness, expected_centerness)
         self.assertAlmostEqual(rel_error(centerness, expected_centerness), 0.0, places=5)
 
     def test_sigmoid_focal_loss(self):
